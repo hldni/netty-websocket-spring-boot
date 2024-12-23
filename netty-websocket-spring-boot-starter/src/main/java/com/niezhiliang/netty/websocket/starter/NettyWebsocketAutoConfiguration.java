@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * @Date : 2023/6/23
  */
 @Configuration
-public class NettyWebsocketAutoConfiguration {
+    public class NettyWebsocketAutoConfiguration {
 
     @Bean
     public WebSocketAnnotationPostProcessor webSocketAnnotationPostProcessor() {

@@ -10,11 +10,13 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketFrameAggregator;
 import io.netty.handler.timeout.IdleStateHandler;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author nzl
  * @date 2023/6/21
  */
+@Slf4j
 public class NettyWebsocketServer {
 
     private final WebsocketActionDispatch websocketActionDispatch;
@@ -57,6 +59,8 @@ public class NettyWebsocketServer {
                 .childOption(ChannelOption.SO_KEEPALIVE,Boolean.TRUE);
 
         ChannelFuture channelFuture = bootstrap.bind(websocketProperties.getPort()).sync();
+
+        log.info("netty websocket server start success on port : {}" , websocketProperties.getPort());
         Channel serverChannle = channelFuture.channel();
         serverChannle.closeFuture().addListener(new ChannelFutureListener() {
             @Override

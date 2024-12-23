@@ -1,9 +1,11 @@
 package com.niezhiliang.netty.websocket.spring.boot.demo.service;
 
+import com.niezhiliang.netty.websocket.spring.boot.demo.controller.TestController;
 import com.niezhiliang.netty.websocket.starter.annotations.*;
 import com.niezhiliang.netty.websocket.starter.socket.Session;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.timeout.IdleStateEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 
@@ -13,10 +15,13 @@ import java.time.LocalDateTime;
  */
 @WsServerEndpoint(value = "/websocket/{uid}/{arg}")
 public class ServerEndpoint {
+@Autowired
+    TestController testController;
 
     @HandshakeBefore
     public void before (HttpHeaders headers) {
         System.out.println("before");
+        testController.test();
     }
 
     /**

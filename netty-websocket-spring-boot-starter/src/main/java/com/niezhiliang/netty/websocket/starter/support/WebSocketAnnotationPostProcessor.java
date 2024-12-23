@@ -12,7 +12,6 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
-import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.ClassUtils;
 
 
@@ -63,9 +62,13 @@ public class WebSocketAnnotationPostProcessor implements SmartInitializingSingle
      */
     private void scanWebsocketServiceBeans(String packagesToScan, BeanDefinitionRegistry registry) {
 
-        ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(registry);
+        ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(registry, false);
         // 扫描 @WsServerEndpoint标注的类
-        scanner.addIncludeFilter(new AnnotationTypeFilter(WsServerEndpoint.class));
+//        scanner.addIncludeFilter(new AnnotationTypeFilter(WsServerEndpoint.class));
+//        scanner.
+        scanner.addIncludeFilter((metadataReader, metadataReaderFactory) -> {
+            return metadataReader.getAnnotationMetadata().hasAnnotation(WsServerEndpoint.class.getName());
+        });
         scanner.scan(packagesToScan);
     }
 

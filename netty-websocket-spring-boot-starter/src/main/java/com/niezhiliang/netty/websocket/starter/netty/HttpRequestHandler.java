@@ -9,6 +9,7 @@ import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.websocketx.CloseWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshakerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.Objects;
@@ -18,6 +19,7 @@ import java.util.Objects;
  * @date 2023/6/25
  */
 @ChannelHandler.Sharable
+@Slf4j
 public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
     private final WebsocketActionDispatch websocketActionDispatch;
@@ -38,7 +40,12 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
         ctx.channel().attr(AttributeKeyConstant.PATH_KEY).set(request.uri());
         Map<String, String> uriTemplateVariables = websocketActionDispatch.getUriTemplateVariables(request.uri());
         ctx.channel().attr(AttributeKeyConstant.uriTemplateVariables).set(uriTemplateVariables);
-        websocketActionDispatch.dispatch(request.uri(), WebsocketActionDispatch.Action.HAND_SHAKE, ctx.channel());
+        try {
+            websocketActionDispatch.dispatch(request.uri(), WebsocketActionDispatch.Action.HAND_SHAKE, ctx.channel());
+        } catch (Exception e) {
+            log.error("dispatch error", e);
+            ctx.close();
+        }
         WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(getWebSocketLocation(request), null, true, 65536);
         WebSocketServerHandshaker handshaker = wsFactory.newHandshaker(request);
         if (handshaker == null) {

@@ -8,9 +8,14 @@
         <version>2.5.7</version>
         <relativePath/>
     </parent>
+
+    <properties>
+        <project.version>0.0.1-SNAPSHOT</project.version>
+    </properties>
+
     <groupId>com.niezhiliang</groupId>
     <artifactId>netty-websocket-spring-boot</artifactId>
-    <version>${project.version}</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -18,17 +23,18 @@
         <module>netty-websocket-spring-boot-demo</module>
     </modules>
 
-    <properties>
-        <project.version>0.0.1-SNAPSHOT</project.version>
-    </properties>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>META-INF/spring/*</include>
+<!--                    <include>META-INF/*</include>-->
+                </includes>
+            </resource>
+        </resources>
     </build>
+
 
 </project>
